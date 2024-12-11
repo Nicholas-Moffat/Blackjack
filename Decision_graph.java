@@ -90,12 +90,16 @@ public class Decision_graph
         this.add_edge("Player busts", "Player loses");
         this.add_edge("Player loses", "Start");
 
+        this.add_edge("Player splits", "Player hits");
+        this.add_edge("Player splits", "Player stands");
+
         this.add_edge("Push", "Start");
 
         this.add_edge("Dealer busts", "Player wins");
         this.add_edge("Player wins", "Start");
 
         this.add_edge("Blackjack", "Player wins");
+        this.add_edge("Blackjack", "Dealer hits");
         this.add_edge("Natural 21", "Player wins");
     }
 
