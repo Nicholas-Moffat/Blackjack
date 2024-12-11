@@ -24,17 +24,28 @@ public class UI extends JPanel
     private JPanel game_panel = new JPanel(null);
     private JButton start_button;
     private JButton hit_button;
+    private JButton hit_hand_1;
+    private JButton stand_hand_1;
+    private JButton stand_hand_2;
+    private JButton hit_hand_2;
     private JButton stand_button;
     private JButton restart_button;
+    private JButton split_button;
     private Decision_graph decision_graph;
     private Cards cards;
     private JLabel player_score_label;
+    private JLabel player_score_1_label;
+    private JLabel player_score_2_label;
     private JLabel dealer_score_label;
     private JLabel hidden_card_label;
     private JLabel dealer_card_label;
+    private JLabel player_card_label_1;
+    private JLabel player_card_label_2;
     private JLabel game_over_label;
     private JLabel outcome_label;
     private String player_score;
+    private String player_score_1;
+    private String player_score_2;
     private String dealer_score;
     private Audio audio;
     private String game_outcome = null;
@@ -140,6 +151,54 @@ public class UI extends JPanel
         hit_button.addActionListener(handler);
         game_panel.add(hit_button);
 
+        hit_hand_1 = new JButton("Hit Hand 1");
+        hit_hand_1.setFont(new Font("Serif", Font.BOLD, 24));
+        hit_hand_1.setBounds(220, 850, 200, 50);
+        hit_hand_1.setForeground(Color.WHITE);
+        hit_hand_1.setBorder(null);
+        hit_hand_1.setFocusPainted(false);
+        hit_hand_1.setContentAreaFilled(false);
+        hit_hand_1.setActionCommand("HIT 1");
+        hit_hand_1.addActionListener(handler);
+        hit_hand_1.setVisible(false);
+        game_panel.add(hit_hand_1);
+
+        stand_hand_1 = new JButton("Stand Hand 1");
+        stand_hand_1.setFont(new Font("Serif", Font.BOLD, 24));
+        stand_hand_1.setBounds(220, 900, 200, 50);
+        stand_hand_1.setForeground(Color.WHITE);
+        stand_hand_1.setBorder(null);
+        stand_hand_1.setFocusPainted(false);
+        stand_hand_1.setContentAreaFilled(false);
+        stand_hand_1.setActionCommand("STAND 1");
+        stand_hand_1.addActionListener(handler);
+        stand_hand_1.setVisible(false);
+        game_panel.add(stand_hand_1);
+
+        hit_hand_2 = new JButton("Hit Hand 2");
+        hit_hand_2.setFont(new Font("Serif", Font.BOLD, 24));
+        hit_hand_2.setBounds(880, 850, 200, 50);
+        hit_hand_2.setForeground(Color.WHITE);
+        hit_hand_2.setBorder(null);
+        hit_hand_2.setFocusPainted(false);
+        hit_hand_2.setContentAreaFilled(false);
+        hit_hand_2.setActionCommand("HIT 2");
+        hit_hand_2.addActionListener(handler);
+        hit_hand_2.setVisible(false);
+        game_panel.add(hit_hand_2);
+
+        stand_hand_2 = new JButton("Stand Hand 2");
+        stand_hand_2.setFont(new Font("Serif", Font.BOLD, 24));
+        stand_hand_2.setBounds(880, 900, 200, 50);
+        stand_hand_2.setForeground(Color.WHITE);
+        stand_hand_2.setBorder(null);
+        stand_hand_2.setFocusPainted(false);
+        stand_hand_2.setContentAreaFilled(false);
+        stand_hand_2.setActionCommand("STAND 2");
+        stand_hand_2.addActionListener(handler);
+        stand_hand_2.setVisible(false);
+        game_panel.add(stand_hand_2);
+
         dealer_score = String.valueOf(cards.get_dealer_score());
         dealer_score_label = new JLabel("Dealer Score: " + dealer_score);
         dealer_score_label.setBounds(1060, 900, 200, 100);
@@ -160,6 +219,18 @@ public class UI extends JPanel
         restart_button.setVisible(false);
         game_panel.add(restart_button);
 
+        split_button = new JButton("Split");
+        split_button.setFont(new Font("Serif", Font.BOLD, 24));
+        split_button.setBounds(1700, 640, 100, 50);
+        split_button.setForeground(Color.WHITE);
+        split_button.setBorder(null);
+        split_button.setFocusPainted(false);
+        split_button.setContentAreaFilled(false);
+        split_button.setActionCommand("SPLIT");
+        split_button.addActionListener(handler);
+        split_button.setVisible(false);
+        game_panel.add(split_button);
+
         stand_button = new JButton("Stand");
         stand_button.setFont(new Font("Serif", Font.BOLD, 24));
         stand_button.setBounds(1700, 540, 100, 50);
@@ -177,6 +248,22 @@ public class UI extends JPanel
         player_score_label.setFont(new Font("Serif", Font.BOLD, 24));
         player_score_label.setForeground(Color.WHITE);
         game_panel.add(player_score_label);
+
+        player_score_1 = String.valueOf(cards.get_player_score_1());
+        player_score_1_label = new JLabel("Player Score: " + player_score_1);
+        player_score_1_label.setBounds(220, 950, 200, 100);
+        player_score_1_label.setFont(new Font("Serif", Font.BOLD, 24));
+        player_score_1_label.setForeground(Color.WHITE);
+        player_score_1_label.setVisible(false);
+        game_panel.add(player_score_1_label);
+
+        player_score_2 = String.valueOf(cards.get_player_score_2());
+        player_score_2_label = new JLabel("Player Score: " + player_score_2);
+        player_score_2_label.setBounds(880, 950, 200, 100);
+        player_score_2_label.setFont(new Font("Serif", Font.BOLD, 24));
+        player_score_2_label.setForeground(Color.WHITE);
+        player_score_2_label.setVisible(false);
+        game_panel.add(player_score_2_label);
 
         main_panel.add(game_panel, "Game Screen");
     }
@@ -261,6 +348,63 @@ public class UI extends JPanel
         game_panel.repaint();
     }
 
+    public void player_splits()
+    {
+        game_panel.remove(player_card_label_2);
+        BufferedImage card_image = cards.get_image_map().get(cards.get_player_hand().get(1));
+        Image scaled_image = card_image.getScaledInstance(200, 300, Image.SCALE_SMOOTH);
+        JLabel card_label = new JLabel(new ImageIcon(scaled_image));
+        card_label.setBounds(880, 550, 200, 300);
+        game_panel.add(card_label);
+        hit_hand_1.setVisible(true);
+        stand_hand_1.setVisible(true);
+        hit_hand_2.setVisible(true);
+        stand_hand_2.setVisible(true);
+        game_panel.remove(hit_button);
+        game_panel.remove(stand_button);
+        game_panel.remove(split_button);
+        player_score_label.setVisible(false);
+        player_score_1_label.setVisible(true);
+        player_score_1_label.setText("Player Score 1: " + cards.get_player_score_1());
+        player_score_2_label.setVisible(true);
+        player_score_2_label.setText("Player Score 2: " + cards.get_player_score_2());
+        game_panel.repaint();
+    }
+
+    public void update_player_score_and_cards_1()
+    {
+        List<String> player_hand_1_copy = new ArrayList<>(cards.get_player_hand_1());
+        for (int i = 1 ; i < player_hand_1_copy.size() ; i++)
+        {
+            BufferedImage card_image = cards.get_image_map().get(player_hand_1_copy.get(i));
+            Image scaled_image = card_image.getScaledInstance(200, 300, Image.SCALE_SMOOTH);
+            JLabel card_label = new JLabel(new ImageIcon(scaled_image));
+            card_label.setBounds(220 + (i*50), 550, 200, 300);
+            game_panel.add(card_label);
+            game_panel.setComponentZOrder(card_label, 0);
+        }
+        player_score_1 = String.valueOf(cards.get_player_score_1());
+        player_score_1_label.setText("Player Score 1: " + player_score_1);
+        game_panel.repaint();
+    }
+
+    public void update_player_score_and_cards_2()
+    {
+        List<String> player_hand_2_copy = new ArrayList<>(cards.get_player_hand_2());
+        for (int i = 0 ; i < player_hand_2_copy.size() ; i++)
+        {
+            BufferedImage card_image = cards.get_image_map().get(player_hand_2_copy.get(i));
+            Image scaled_image = card_image.getScaledInstance(200, 300, Image.SCALE_SMOOTH);
+            JLabel card_label = new JLabel(new ImageIcon(scaled_image));
+            card_label.setBounds(880 + (i*50), 550, 200, 300);
+            game_panel.add(card_label);
+            game_panel.setComponentZOrder(card_label, 0);
+        }
+        player_score_2 = String.valueOf(cards.get_player_score_2());
+        player_score_2_label.setText("Player Score 2: " + player_score_2);
+        game_panel.repaint();
+    }
+
     public void update_player_score_and_cards()
     {
         List<String> player_hand_copy = new ArrayList<>(cards.get_player_hand());
@@ -270,9 +414,9 @@ public class UI extends JPanel
             count++;
             BufferedImage card_image = cards.get_image_map().get(key);
             Image scaled_image = card_image.getScaledInstance(200, 300, Image.SCALE_SMOOTH);
-            JLabel player_card_label = new JLabel(new ImageIcon(scaled_image));
-            player_card_label.setBounds((count*220), 550, 200, 300);
-            game_panel.add(player_card_label);
+            JLabel card_label = new JLabel(new ImageIcon(scaled_image));
+            card_label.setBounds((count*220), 550, 200, 300);
+            game_panel.add(card_label);
         }
         player_score = String.valueOf(cards.get_player_score());
         player_score_label.setText("Player Score: " + player_score);
@@ -359,15 +503,15 @@ public class UI extends JPanel
                 case 1:
                     BufferedImage card_image = cards.get_image_map().get(both_hands.get(0));
                     Image scaled_image = card_image.getScaledInstance(200, 300, Image.SCALE_SMOOTH);
-                    JLabel card_label = new JLabel(new ImageIcon(scaled_image));
-                    card_label.setBounds(220, 550, 200, 300);
-                    game_panel.add(card_label);
+                    player_card_label_1 = new JLabel(new ImageIcon(scaled_image));
+                    player_card_label_1.setBounds(220, 550, 200, 300);
+                    game_panel.add(player_card_label_1);
                     break;
 
                 case 2:
                     card_image = cards.get_image_map().get(both_hands.get(1));
                     scaled_image = card_image.getScaledInstance(200, 300, Image.SCALE_SMOOTH);
-                    card_label = new JLabel(new ImageIcon(scaled_image));
+                    JLabel card_label = new JLabel(new ImageIcon(scaled_image));
                     card_label.setBounds(220, 150, 200, 300);
                     game_panel.add(card_label);
                     break;
@@ -375,9 +519,9 @@ public class UI extends JPanel
                 case 3:
                     card_image = cards.get_image_map().get(both_hands.get(2));
                     scaled_image = card_image.getScaledInstance(200, 300, Image.SCALE_SMOOTH);
-                    card_label = new JLabel(new ImageIcon(scaled_image));
-                    card_label.setBounds(440, 550, 200, 300);
-                    game_panel.add(card_label);
+                    player_card_label_2 = new JLabel(new ImageIcon(scaled_image));
+                    player_card_label_2.setBounds(440, 550, 200, 300);
+                    game_panel.add(player_card_label_2);
                     break;
 
                 case 4:
@@ -386,6 +530,10 @@ public class UI extends JPanel
                     if (cards.get_player_score() == 21)
                     {
                         natural();
+                    }
+                    else if (cards.can_split_double())
+                    {
+                        split_button.setVisible(true);
                     }
                     ((Timer) e.getSource()).stop();
                     break;

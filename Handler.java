@@ -108,7 +108,31 @@ public class Handler extends MouseAdapter implements ActionListener
                 });
                 break;
 
+            case "HIT 1":
+                System.out.println("Hit hand 1");
+                cards.player_draw_1();
+                ui.update_player_score_and_cards_1();
+                break;
+
+            case "HIT 2":
+                System.out.println("Hit hand 2");
+                cards.player_draw_2();
+                ui.update_player_score_and_cards_2();
+                break;
+
+            case "STAND 1":
+                System.out.println("Stand hand 1");
+                break;
+            
+            case "STAND 2":
+                System.out.println("Stand hand 2");
+                break;
+
             case "SPLIT":
+                System.out.println("Splitting...");
+                cards.split_hand();
+                decision_graph.transitionTo("Player splits");
+                ui.player_splits();
                 break;
 
             case "DOUBLE":
